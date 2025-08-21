@@ -1,11 +1,13 @@
 gradio
+gradio[oauth]
 requests
 langchain
 langchain-community
 langchain-core
 langchain-google-genai
 langchain-huggingface
-langchain-groq
+langchain-ollama
+langchain-together
 langchain-tavily
 langchain-chroma
 langgraph
@@ -16,3 +18,10 @@ pymupdf
 wikipedia
 pgvector
 python-dotenv
+ipykernel
+ddgs
+wikipedia
+wiki
+bs4
+openpyxl
+pillow

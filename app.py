@@ -3,6 +3,11 @@ import gradio as gr
 import requests
 import inspect
 import pandas as pd
+from agent import ReActAgent
+from dotenv import load_dotenv
+from langchain_core.messages import SystemMessage, HumanMessage
+
+load_dotenv()
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -10,14 +15,23 @@ DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 
 # --- Basic Agent Definition ---
 # ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
-class BasicAgent:
-    def __init__(self):
-        print("BasicAgent initialized.")
-    def __call__(self, question: str) -> str:
-        print(f"Agent received question (first 50 chars): {question[:50]}...")
-        fixed_answer = "This is a default answer."
-        print(f"Agent returning fixed answer: {fixed_answer}")
-        return fixed_answer
+# class BasicAgent:
+#     def __init__(self):
+#         print("BasicAgent initialized.")
+#         self.graph = build_graph()
+#         with open("system_prompt_short_llama.txt", "r", encoding="utf-8") as f:
+#             system_prompt = f.read()
+
+#         self.sys_msg = SystemMessage(content=system_prompt)
+#     def __call__(self, question: str) -> str:
+#         print(f"Agent received question (first 50 chars): {question[:50]}...")
+
+#         messages = [self.sys_msg] + [HumanMessage(content=question)]
+#         messages = self.graph.invoke({"messages": messages})
+
+#         fixed_answer = messages["messages"][-1].content[14:]
+#         print(f"Agent returning fixed answer: {fixed_answer}")
+#         return fixed_answer
 
 def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
@@ -40,7 +54,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
 
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
-        agent = BasicAgent()
+        agent = ReActAgent()
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
@@ -76,11 +90,12 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
     for item in questions_data:
         task_id = item.get("task_id")
         question_text = item.get("question")
+        file_name = item.get("file_name")
         if not task_id or question_text is None:
             print(f"Skipping item with missing task_id or question: {item}")
             continue
         try:
-            submitted_answer = agent(question_text)
+            submitted_answer = agent(question_text, file_name)
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
         except Exception as e:
