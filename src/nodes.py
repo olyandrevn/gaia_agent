@@ -26,9 +26,9 @@ class AnswerTemplate(BaseModel):
 tools = [
     calculator,
     wiki_search,
-    web_search,
+    # web_search,
     reverse_string,
-    tool_download_image,
+    # tool_download_image,
     tool_read_files,
 ]
 
@@ -62,7 +62,7 @@ def assistant(state: AgentState):
         temperature=0,
         timeout=None,
         max_retries=2,
-        top_p=0.7,
+        top_p=0.8,
         # truncation='auto',
     )   
 

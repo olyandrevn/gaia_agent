@@ -61,7 +61,7 @@ def wiki_search(query: str) -> dict:
     
     Args:
         query: The search query."""
-    search_docs = WikipediaRetriever(load_max_docs=1).invoke(query)
+    search_docs = WikipediaRetriever(load_max_docs=1, top_k_results=2).invoke(query)
     wiki_results = []
 
     for doc in search_docs:
